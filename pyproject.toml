@@ -1,0 +1,9 @@
+[project]
+name="python-getting-started"
+version="0.1.0"
+description="Python Getting Started"
+requires-python=">3.11"
+dependencies=[
+    "google-adk[a2a]>=1.33.0",
+]
+[tools.uv]
