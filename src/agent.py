@@ -7,7 +7,7 @@ def get_current_time():
     return f"The current time is: {now.strftime('%Y-%m-%d %H:%M:%S')} "
 
 root_agent = Agent(name = "google_adk_time_agent",
-                   description = "An agent that greets the user and provides the current time.",
+                   description = "An agent that greets the user and provides the current local time.",
                    model="gemini-2.5-flash",
                    instruction= """You are a helpful and friendly AI assistant.
                    Greet the user warmly and use the tools when needed.""",
