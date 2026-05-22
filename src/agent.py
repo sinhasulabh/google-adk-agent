@@ -1,18 +1,29 @@
+import os
 from google.adk.agents import Agent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
-from datetime import datetime
+from tavily import TavilyClient
 
-def get_current_time():
-    now =  datetime.now()
-    return f"The current time is: {now.strftime('%Y-%m-%d %H:%M:%S')} "
+_tavily = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
 
-root_agent = Agent(name = "google_adk_time_agent",
-                   description = "An agent that greets the user and provides the current local time.",
-                   model="gemini-2.5-flash",
-                   instruction= """You are a helpful and friendly AI assistant.
-                   Greet the user warmly and use the tools when needed.""",
-                    tools=[get_current_time]
-                   )
+def web_search(query: str) -> str:
+    """Search the web for up-to-date information on a given query."""
+    response = _tavily.search(query=query, max_results=5)
+    results = response.get("results", [])
+    if not results:
+        return "No results found."
+    return "\n\n".join(
+        f"<search_result>\n{r['title']}\n{r['url']}\n{r['content'][:500]}\n</search_result>"
+        for r in results
+    )
+
+root_agent = Agent(
+    name="google_adk_web_search_agent",
+    description="An agent that can search the web to answer questions.",
+    model="gemini-2.5-flash",
+    instruction="""You are a helpful and friendly AI assistant.
+Use the web_search tool to find up-to-date information when answering questions, only if it is necessary.""",
+    tools=[web_search],
+)
 
 # Convert to A2A server (this enables the agent card)
 app = to_a2a(root_agent)

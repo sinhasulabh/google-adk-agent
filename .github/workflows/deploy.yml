@@ -51,7 +51,7 @@ jobs:
             --port 8080 \
             --allow-unauthenticated \
             --region ${{ env.REGION }} \
-            --set-secrets=GOOGLE_API_KEY=gemini-api-key:latest \
+            --set-secrets=GOOGLE_API_KEY=gemini-api-key:latest,TAVILY_API_KEY=tavily-api-key:latest \
             --cpu=1 \
             --memory=512Mi \
             --min-instances=0 \
